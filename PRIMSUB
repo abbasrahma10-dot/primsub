@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRIMSUB | متجر الاشتراكات الرقميّة الأول</title>
+
+  <!-- منع وميض الواجهة قبل تحميل الوضع الليلي/النهاري -->
+  <script>
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+  </script>
+
+  <!-- أيقونة المتصفح (Favicon) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Crect width='1000' height='1000' rx='220' fill='%23EA0000'/%3E%3Ccircle cx='375' cy='307' r='42' fill='%23FFFFFF'/%3E%3Cpath d='M 490 307 H 535 A 88 88 0 0 1 535 483 H 382 V 693' fill='none' stroke='%23FFFFFF' stroke-width='84' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+
+  <!-- Google Fonts (Tajawal) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" />
+
+  <!-- AOS Animation CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Tajawal', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #F0F4F8;
+      color: #0F172A;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    .dark body {
+      background-color: #05070B;
+      color: #F8FAFC;
+    }
+
+    /* تأثير الزجاج السائل (Liquid Glass) */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+    .dark .liquid-glass {
+      background: rgba(18, 20, 32, 0.55);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    /* توهج سائل للبطاقات عند التمرير */
+    .liquid-card:hover {
+      border-color: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 20px 50px -10px rgba(139, 92, 246, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transform: translateY(-6px);
+    }
+    .dark .liquid-card:hover {
+      border-color: rgba(139, 92, 246, 0.6);
+      box-shadow: 0 20px 50px -10px rgba(139, 92, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      transform: translateY(-6px);
+    }
+
+    /* أزرار المدد */
+    .duration-btn {
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(0, 0, 0, 0.03);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    .dark .duration-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .duration-btn:hover {
+      background: rgba(139, 92, 246, 0.08);
+    }
+    .duration-btn.active {
+      background: rgba(139, 92, 246, 0.15);
+      border-color: #8B5CF6;
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    }
+
+    /* حركة السوائل في الخلفية */
+    @keyframes liquid-blob {
+      0%, 100% { transform: translate(0px, 0px) scale(1); }
+      33% { transform: translate(30px, -50px) scale(1.1); }
+      66% { transform: translate(-20px, 20px) scale(0.9); }
+    }
+    .animate-liquid-1 {
+      animation: liquid-blob 10s ease-in-out infinite;
+    }
+    .animate-liquid-2 {
+      animation: liquid-blob 14s ease-in-out infinite reverse;
+    }
+    .animate-liquid-3 {
+      animation: liquid-blob 12s ease-in-out infinite 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    .animate-float {
+      animation: float 5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="relative antialiased selection:bg-purple-500 selection:text-white">
+
+  <!-- خلفية السوائل المتدفقة (Liquid Blobs) -->
+  <div class="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
+    <div class="absolute -top-32 -right-32 w-[500px] h-[500px] bg-purple-400/30 dark:bg-purple-600/20 rounded-full blur-[130px] animate-liquid-1"></div>
+    <div class="absolute top-1/2 -left-32 w-[500px] h-[500px] bg-blue-400/30 dark:bg-blue-600/20 rounded-full blur-[130px] animate-liquid-2"></div>
+    <div class="absolute -bottom-32 right-1/3 w-[500px] h-[500px] bg-indigo-400/25 dark:bg-indigo-600/20 rounded-full blur-[130px] animate-liquid-3"></div>
+  </div>
+
+  <!-- القائمة العلوية (Navbar) -->
+  <header class="sticky top-0 z-50 liquid-glass border-b border-white/20 dark:border-white/5 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center justify-between h-20">
+        
+        <!-- شعار المتجر -->
+        <a href="#home" class="flex items-center gap-3 text-2xl font-black tracking-wider group">
+          <img src="Untitled-1.png" alt="PRIMSUB Logo" class="w-11 h-11 rounded-2xl object-cover shadow-xl shadow-red-500/20 transition-transform duration-300 group-hover:scale-105"
+               onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1000 1000%22%3E%3Crect width=%221000%22 height=%221000%22 fill=%22%23EA0000%22/%3E%3Ccircle cx=%22375%22 cy=%22307%22 r=%2242%22 fill=%22%23FFFFFF%22/%3E%3Cpath d=%22M 490 307 H 535 A 88 88 0 0 1 535 483 H 382 V 693%22 fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2284%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E';" />
+          <span class="text-slate-900 dark:text-white">PRIMSUB</span>
+        </a>
+
+        <!-- روابط سطح المكتب -->
+        <ul class="hidden md:flex items-center gap-8 text-sm font-bold text-slate-700 dark:text-slate-300">
+          <li><a href="#home" class="hover:text-purple-600 dark:hover:text-white transition">الرئيسية</a></li>
+          <li><a href="#subscriptions" class="hover:text-purple-600 dark:hover:text-white transition">الاشتراكات</a></li>
+          <li><a href="#about" class="hover:text-purple-600 dark:hover:text-white transition">من نحن</a></li>
+          <li><a href="#contact" class="hover:text-purple-600 dark:hover:text-white transition">تواصل معنا</a></li>
+        </ul>
+
+        <!-- أزرار القائمة والوضع الليلي -->
+        <div class="flex items-center gap-3">
+          <button id="theme-toggle" type="button" class="w-10 h-10 rounded-2xl liquid-glass flex items-center justify-center text-slate-800 dark:text-slate-200 hover:scale-105 transition">
+            <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden text-lg"></i>
+            <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden text-lg"></i>
+          </button>
+
+          <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%D8%A7%D8%AA" 
+             target="_blank" rel="noopener"
+             class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-sm font-bold px-5 py-2.5 rounded-2xl shadow-xl shadow-purple-500/25 transition">
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+            اطلب الآن
+          </a>
+
+          <button id="menu-btn" class="md:hidden w-10 h-10 rounded-2xl liquid-glass flex items-center justify-center text-slate-800 dark:text-slate-200">
+            <i class="fa-solid fa-bars text-lg"></i>
+          </button>
+        </div>
+      </nav>
+
+      <!-- قائمة الموبايل -->
+      <div id="mobile-menu" class="hidden md:hidden pb-5 border-t border-slate-200/50 dark:border-white/5 mt-2 pt-4">
+        <ul class="flex flex-col gap-3 text-sm font-bold text-slate-700 dark:text-slate-300">
+          <li><a href="#home" class="mobile-link block py-2 hover:text-purple-600">الرئيسية</a></li>
+          <li><a href="#subscriptions" class="mobile-link block py-2 hover:text-purple-600">الاشتراكات</a></li>
+          <li><a href="#about" class="mobile-link block py-2 hover:text-purple-600">من نحن</a></li>
+          <li><a href="#contact" class="mobile-link block py-2 hover:text-purple-600">تواصل معنا</a></li>
+          <li class="pt-2">
+            <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%D8%A7%D8%AA" 
+               target="_blank" rel="noopener"
+               class="w-full inline-flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 rounded-2xl">
+              <i class="fa-brands fa-whatsapp"></i> اطلب عبر واتساب
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- القسم الرئيسي (Hero Section) -->
+    <section id="home" class="relative pt-16 pb-28 lg:pt-28 lg:pb-36 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- النص الأيمن -->
+        <div class="lg:col-span-7 text-center lg:text-right" data-aos="fade-left" data-aos-duration="1000">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-2xl text-xs sm:text-sm font-bold liquid-glass text-purple-700 dark:text-purple-300 mb-6">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-purple-600"></span>
+            </span>
+            متجر الاشتراكات الرقميّة الأول في الخليج
+          </span>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-normal sm:leading-relaxed mb-6 text-slate-900 dark:text-white">
+            كل ما تحتاجه من
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 dark:from-purple-400 dark:via-indigo-400 dark:to-blue-400 py-2 inline-block">
+              اشتراكات
+            </span>
+            في العالم الرقمي
+          </h1>
+
+          <p class="text-slate-600 dark:text-slate-400 text-base sm:text-lg lg:text-xl max-w-2xl mx-auto lg:mx-0 mb-8 leading-relaxed font-medium">
+            اشتراكات بريميوم أصلية لخدمات البث والذكاء الاصطناعي وأدوات التصميم — بأسعار لا تُقاوَم، تفعيل فوري، وضمان كامل.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 mb-10">
+            <a href="#subscriptions" class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold px-7 py-4 rounded-2xl shadow-xl shadow-purple-500/30 transition transform hover:-translate-y-0.5">
+              <i class="fa-solid fa-layer-group"></i>
+              تصفح العروض
+            </a>
+            <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%10%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%D8%A7%D8%AA" 
+               target="_blank" rel="noopener"
+               class="inline-flex items-center gap-2 liquid-glass hover:bg-white/60 dark:hover:bg-white/20 text-slate-800 dark:text-white font-bold px-7 py-4 rounded-2xl transition">
+              <i class="fa-brands fa-whatsapp text-emerald-500 text-lg"></i>
+              استفسر الآن
+            </a>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6 text-sm text-slate-500 dark:text-slate-400 font-bold">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-amber-500 dark:text-purple-400"></i> تسليم فوري</span>
+            <span class="flex items-center gap-2"><i class="fa-solid fa-shield-halved text-blue-500 dark:text-blue-400"></i> ضمان موثوق</span>
+          </div>
+        </div>
+
+        <!-- البطاقة التفاعلية اليسرى -->
+        <div class="lg:col-span-5 relative" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="200">
+          <div class="relative mx-auto max-w-md animate-float">
+            <div class="liquid-glass rounded-3xl p-6 sm:p-8 relative z-10">
+              
+              <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-200/50 dark:border-white/10">
+                <div class="flex items-center gap-3">
+                  <img src="Untitled-1.png" alt="PRIMSUB" class="w-12 h-12 rounded-2xl object-cover shadow-lg shadow-red-500/20"
+                       onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1000 1000%22%3E%3Crect width=%221000%22 height=%221000%22 fill=%22%23EA0000%22/%3E%3Ccircle cx=%22375%22 cy=%22307%22 r=%2242%22 fill=%22%23FFFFFF%22/%3E%3Cpath d=%22M 490 307 H 535 A 88 88 0 0 1 535 483 H 382 V 693%22 fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2284%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E';" />
+                  <div>
+                    <p class="font-black text-slate-900 dark:text-white">اشتراكات مميزة</p>
+                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400">مفعّلة وجاهزة</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
+                  متوفّر
+                </span>
+              </div>
+
+              <div class="space-y-3 mb-6">
+                <!-- Gemini Mini Row -->
+                <div class="flex items-center justify-between p-3.5 rounded-2xl liquid-glass border border-white/40 dark:border-white/5 hover:scale-[1.02] transition">
+                  <span class="flex items-center gap-3 font-bold text-sm text-slate-800 dark:text-slate-200">
+                    <img src="unnamed.webp" alt="Gemini" class="w-8 h-8 rounded-xl object-cover bg-white shadow-sm"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23FFFFFF%22/%3E%3C/svg%3E';" />
+                    Gemini AI Pro1
+                  </span>
+                  <span class="font-black text-purple-600 dark:text-purple-400">2.0 BD</span>
+                </div>
+
+                <!-- Canva Mini Row -->
+                <div class="flex items-center justify-between p-3.5 rounded-2xl liquid-glass border border-white/40 dark:border-white/5 hover:scale-[1.02] transition">
+                  <span class="flex items-center gap-3 font-bold text-sm text-slate-800 dark:text-slate-200">
+                    <img src="image (1).jpg" alt="Canva" class="w-8 h-8 rounded-xl object-cover shadow-sm"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3C/svg%3E';" />
+                    Canva Pro
+                  </span>
+                  <span class="font-black text-purple-600 dark:text-purple-400">1.0 BD</span>
+                </div>
+
+                <!-- CapCut Mini Row -->
+                <div class="flex items-center justify-between p-3.5 rounded-2xl liquid-glass border border-white/40 dark:border-white/5 hover:scale-[1.02] transition">
+                  <span class="flex items-center gap-3 font-bold text-sm text-slate-800 dark:text-slate-200">
+                    <img src="image.png" alt="CapCut" class="w-8 h-8 rounded-xl object-cover bg-white shadow-sm"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3C/svg%3E';" />
+                    CapCut Pro
+                  </span>
+                  <span class="font-black text-purple-600 dark:text-purple-400">1.7 BD</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20">
+                <div>
+                  <p class="text-xs font-bold text-slate-600 dark:text-slate-300">وفّر أكثر من</p>
+                  <p class="text-2xl font-black text-purple-700 dark:text-white">70٪</p>
+                </div>
+                <div class="w-12 h-12 rounded-full liquid-glass flex items-center justify-center shadow-sm">
+                  <i class="fa-solid fa-arrow-trend-down text-2xl text-emerald-500"></i>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- قسم الاشتراكات (Subscriptions) -->
+    <section id="subscriptions" class="py-24 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-2xl mx-auto mb-12" data-aos="fade-up">
+          <span class="inline-block py-1 px-4 rounded-full liquid-glass text-purple-700 dark:text-purple-300 font-bold text-sm tracking-wide uppercase mb-3">الاشتراكات المتوفّرة</span>
+          <h2 class="text-3xl sm:text-4xl font-black mt-2 mb-4 text-slate-900 dark:text-white">اختر اشتراكك المفضّل</h2>
+          <p class="text-slate-600 dark:text-slate-400 font-medium">تشكيلة منتقاة من أرقى الخدمات الرقمية بأسعار مخفّضة تُوفّر عليك الكثير شهريًّا.</p>
+        </div>
+
+        <!-- أزرار الفلترة (الفئات) -->
+        <div class="flex flex-wrap items-center justify-center gap-3 mb-12" data-aos="fade-up" data-aos-delay="100">
+          <button class="filter-btn bg-purple-600 text-white shadow-lg shadow-purple-500/30 active px-6 py-2.5 rounded-2xl font-bold text-sm transition-all" data-filter="all">الكل</button>
+          <button class="filter-btn liquid-glass text-slate-700 dark:text-slate-300 hover:bg-white/60 px-6 py-2.5 rounded-2xl font-bold text-sm transition-all" data-filter="ai">الذكاء الاصطناعي</button>
+          <button class="filter-btn liquid-glass text-slate-700 dark:text-slate-300 hover:bg-white/60 px-6 py-2.5 rounded-2xl font-bold text-sm transition-all" data-filter="design">أدوات التصميم</button>
+          <button class="filter-btn liquid-glass text-slate-700 dark:text-slate-300 hover:bg-white/60 px-6 py-2.5 rounded-2xl font-bold text-sm transition-all" data-filter="entertainment">الترفيه</button>
+          <button class="filter-btn liquid-glass text-slate-700 dark:text-slate-300 hover:bg-white/60 px-6 py-2.5 rounded-2xl font-bold text-sm transition-all" data-filter="other">أخرى</button>
+        </div>
+
+        <!-- شبكة البطاقات -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="cards-container">
+
+          <!-- 1. Gemini (AI) -->
+          <article class="sub-card liquid-glass liquid-card rounded-3xl p-6 flex flex-col justify-between relative transform scale-100 opacity-100" data-name="Gemini Google AI Pro1" data-category="ai" data-aos="fade-up" data-aos-delay="150">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl overflow-hidden border border-white/50 dark:border-white/10 shrink-0 shadow-sm bg-white p-1">
+                    <img src="unnamed.webp" alt="Gemini" class="w-full h-full object-cover rounded-xl"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23FFFFFF%22/%3E%3C/svg%3E';" />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight">Gemini</h3>
+                    <p class="text-xs font-bold text-purple-600 dark:text-purple-400 mt-0.5">Google AI Pro1</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30 shrink-0">
+                  الذكاء الاصطناعي
+                </span>
+              </div>
+              <div class="liquid-glass rounded-2xl p-4 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-bold dark:font-medium text-slate-700 dark:text-slate-300 mb-6" dir="ltr">
+                <div class="flex items-center justify-end gap-2"><span>5 TB storage</span><i class="fa-solid fa-cloud text-sky-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Antigravity</span><i class="fa-solid fa-rocket text-purple-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>NotebookLM</span><i class="fa-solid fa-book-open text-emerald-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Google Flow</span><i class="fa-solid fa-wand-magic-sparkles text-indigo-500"></i></div>
+              </div>
+              <div class="mb-6">
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-bold dark:font-medium mb-3">اختر مدة الاشتراك:</p>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <button type="button" class="duration-btn active rounded-2xl p-3 text-right" data-duration="3 أشهر" data-price="2.0">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">3 أشهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">2.0 BD</p>
+                  </button>
+                  <button type="button" class="duration-btn rounded-2xl p-3 text-right" data-duration="6 أشهر" data-price="3.5">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">6 أشهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">3.5 BD</p>
+                  </button>
+                  <button type="button" class="duration-btn rounded-2xl p-3 text-right" data-duration="12 شهر" data-price="5.5">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">12 شهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">5.5 BD</p>
+                  </button>
+                  <button type="button" class="duration-btn rounded-2xl p-3 text-right" data-duration="سنة ونصف" data-price="6.5">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">سنة ونصف</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">6.5 BD</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+              <div>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mb-0.5">السعر الرسمي: <span class="line-through text-red-500 font-bold">8.5 BD</span> / شهر</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white"><span class="selected-price">2.0</span> <span class="text-xs font-bold text-purple-600 dark:text-purple-400">BD</span> <span class="text-xs font-bold text-slate-400">/ <span class="selected-duration">3 أشهر</span></span></p>
+              </div>
+              <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D9%81%D9%8A%20Gemini%20Google%20AI%20Pro1%20(%D9%84%D9%85%D8%AF%D8%A9%203%20%D8%A3%D8%B4%D9%87%D8%B1%20-%202.0%20BD)" target="_blank" rel="noopener" class="order-btn bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-bold text-sm px-6 py-3 rounded-2xl shadow-lg shadow-purple-500/30 transition">اشترك الآن</a>
+            </div>
+          </article>
+
+          <!-- 2. Canva Pro (Design) -->
+          <article class="sub-card liquid-glass liquid-card rounded-3xl p-6 flex flex-col justify-between relative transform scale-100 opacity-100" data-name="Canva Pro" data-category="design" data-aos="fade-up" data-aos-delay="250">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl overflow-hidden border border-white/50 dark:border-white/10 shrink-0 shadow-sm p-1">
+                    <img src="image (1).jpg" alt="Canva Pro" class="w-full h-full object-cover rounded-xl"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3C/svg%3E';" />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight">Canva Pro</h3>
+                    <p class="text-xs font-bold text-cyan-600 dark:text-cyan-400 mt-0.5">تصميم احترافي</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-cyan-500/15 text-cyan-700 dark:text-cyan-300 border border-cyan-500/30 shrink-0">
+                  للمصممين
+                </span>
+              </div>
+              <div class="liquid-glass rounded-2xl p-4 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-bold dark:font-medium text-slate-700 dark:text-slate-300 mb-6" dir="ltr">
+                <div class="flex items-center justify-end gap-2"><span>Templates</span><i class="fa-solid fa-border-all text-sky-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>AI Tools</span><i class="fa-solid fa-wand-magic-sparkles text-cyan-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>100 GB storage</span><i class="fa-solid fa-cloud text-sky-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Premium assets</span><i class="fa-solid fa-paintbrush text-purple-500"></i></div>
+              </div>
+              <div class="mb-6">
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-bold dark:font-medium mb-3">اختر مدة الاشتراك:</p>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <button type="button" class="duration-btn active rounded-2xl p-3 text-right" data-duration="6 أشهر" data-price="1.0">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">6 أشهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">1.0 BD</p>
+                  </button>
+                  <button type="button" class="duration-btn rounded-2xl p-3 text-right" data-duration="12 شهر" data-price="2.0">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">12 شهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">2.0 BD</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+              <div>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mb-0.5">سعر العرض الخاص</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white"><span class="selected-price">1.0</span> <span class="text-xs font-bold text-cyan-600 dark:text-cyan-400">BD</span> <span class="text-xs font-bold text-slate-400">/ <span class="selected-duration">6 أشهر</span></span></p>
+              </div>
+              <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D9%81%D9%8A%20Canva%20Pro%20(%D9%84%D9%85%D8%AF%D8%A9%206%20%D8%A3%D8%B4%D9%87%D8%B1%20-%201.0%20BD)" target="_blank" rel="noopener" class="order-btn bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-bold text-sm px-6 py-3 rounded-2xl shadow-lg shadow-cyan-500/30 transition">اشترك الآن</a>
+            </div>
+          </article>
+
+          <!-- 3. CapCut Pro (Design) -->
+          <article class="sub-card liquid-glass liquid-card rounded-3xl p-6 flex flex-col justify-between relative transform scale-100 opacity-100" data-name="CapCut Pro" data-category="design" data-aos="fade-up" data-aos-delay="350">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl overflow-hidden border border-white/50 dark:border-white/10 shrink-0 shadow-sm bg-white p-1.5">
+                    <img src="image.png" alt="CapCut Pro" class="w-full h-full object-cover"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3C/svg%3E';" />
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5">
+                      <h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight">CapCut</h3>
+                      <span class="px-2 py-0.5 text-[11px] font-black rounded-lg bg-slate-900 text-white dark:bg-gradient-to-r dark:from-cyan-400 dark:to-pink-400 dark:text-slate-950">Pro</span>
+                    </div>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">مونتاج وتحرير فيديو</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-pink-500/15 text-pink-700 dark:text-pink-300 border border-pink-500/30 shrink-0">
+                  أدوات التصميم
+                </span>
+              </div>
+              <div class="liquid-glass rounded-2xl p-4 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-bold dark:font-medium text-slate-700 dark:text-slate-300 mb-6" dir="ltr">
+                <div class="flex items-center justify-end gap-2"><span>Auto cutout</span><i class="fa-solid fa-scissors text-cyan-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Effects</span><i class="fa-solid fa-wand-magic-sparkles text-pink-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Transitions</span><i class="fa-solid fa-sliders text-indigo-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Templates</span><i class="fa-solid fa-border-all text-purple-500"></i></div>
+              </div>
+              <div class="mb-6">
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-bold dark:font-medium mb-3">اختر مدة الاشتراك:</p>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <button type="button" class="duration-btn active rounded-2xl p-3 text-right" data-duration="شهر واحد" data-price="1.7">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">شهر واحد</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">1.7 BD</p>
+                  </button>
+                  <button type="button" class="duration-btn rounded-2xl p-3 text-right" data-duration="6 أشهر" data-price="7.5">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">6 أشهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">7.5 BD</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+              <div>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mb-0.5">السعر الرسمي: <span class="line-through text-red-500 font-bold">3.7 BD</span> / شهر</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white"><span class="selected-price">1.7</span> <span class="text-xs font-bold text-pink-600 dark:text-pink-400">BD</span> <span class="text-xs font-bold text-slate-400">/ <span class="selected-duration">شهر واحد</span></span></p>
+              </div>
+              <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D9%81%D9%8A%20CapCut%20Pro%20(%D9%84%D9%85%D8%AF%D8%A9%20%D8%B4%D9%87%D8%B1%20%D9%88%D8%A7%D8%AD%D8%AF%20-%201.7%20BD)" target="_blank" rel="noopener" class="order-btn bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm px-6 py-3 rounded-2xl shadow-lg transition">اشترك الآن</a>
+            </div>
+          </article>
+
+          <!-- 4. Amazon Prime (Entertainment) -->
+          <article class="sub-card liquid-glass liquid-card rounded-3xl p-6 flex flex-col justify-between relative transform scale-100 opacity-100" data-name="Amazon Prime" data-category="entertainment" data-aos="fade-up" data-aos-delay="450">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl overflow-hidden border border-white/50 dark:border-white/10 shrink-0 shadow-sm p-1">
+                    <img src="31W9hs7w0JL.png" alt="Amazon Prime Video" class="w-full h-full object-cover rounded-xl"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3C/svg%3E';" />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight">Amazon Prime</h3>
+                    <p class="text-xs font-bold text-sky-600 dark:text-sky-400 mt-0.5">prime video</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-500/30 shrink-0">
+                  الترفيه
+                </span>
+              </div>
+              <div class="liquid-glass rounded-2xl p-4 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-bold dark:font-medium text-slate-700 dark:text-slate-300 mb-6" dir="ltr">
+                <div class="flex items-center justify-end gap-2"><span>4K quality & HDR</span><i class="fa-solid fa-film text-sky-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>3 devices</span><i class="fa-solid fa-tv text-purple-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Downloads</span><i class="fa-solid fa-download text-emerald-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>No ads</span><i class="fa-solid fa-ban text-rose-500"></i></div>
+              </div>
+              <div class="mb-6">
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-bold dark:font-medium mb-3">اختر مدة الاشتراك:</p>
+                <div class="grid grid-cols-2 gap-2.5">
+                  <button type="button" class="duration-btn active rounded-2xl p-3 text-right" data-duration="6 أشهر" data-price="7.5">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">6 أشهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">7.5 BD</p>
+                  </button>
+                  <button type="button" class="duration-btn rounded-2xl p-3 text-right" data-duration="12 شهر" data-price="13.5">
+                    <p class="text-xs text-slate-700 dark:text-slate-300 font-bold">12 شهر</p>
+                    <p class="text-sm font-black text-slate-900 dark:text-white mt-0.5">13.5 BD</p>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+              <div>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mb-0.5">السعر الرسمي: <span class="line-through text-red-500 font-bold">15.0 BD</span> / 6 أشهر</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white"><span class="selected-price">7.5</span> <span class="text-xs font-bold text-sky-600 dark:text-sky-400">BD</span> <span class="text-xs font-bold text-slate-400">/ <span class="selected-duration">6 أشهر</span></span></p>
+              </div>
+              <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D9%81%D9%8A%20Amazon%20Prime%20(%D9%84%D9%85%D8%AF%D8%A9%206%20%D8%A3%D8%B4%D9%87%D8%B1%20-%207.5%20BD)" target="_blank" rel="noopener" class="order-btn bg-[#00A8E1] hover:bg-[#0092c4] text-white font-bold text-sm px-6 py-3 rounded-2xl shadow-lg shadow-sky-500/30 transition">اشترك الآن</a>
+            </div>
+          </article>
+
+          <!-- 5. Crunchyroll Mega (Entertainment) -->
+          <article class="sub-card liquid-glass liquid-card rounded-3xl p-6 flex flex-col justify-between relative transform scale-100 opacity-100" data-name="Crunchyroll Mega" data-category="entertainment" data-aos="fade-up" data-aos-delay="550">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl overflow-hidden border border-white/50 dark:border-white/10 shrink-0 shadow-sm p-1 bg-white">
+                    <img src="41o03HyOYlL.png" alt="Crunchyroll" class="w-full h-full object-cover rounded-xl"
+                         onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3C/svg%3E';" />
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight">Crunchyroll</h3>
+                    <p class="text-xs font-bold text-orange-600 dark:text-orange-400 mt-0.5">Mega Fan سنوية</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-orange-500/15 text-orange-700 dark:text-orange-300 border border-orange-500/30 shrink-0">
+                  الترفيه
+                </span>
+              </div>
+              <div class="liquid-glass rounded-2xl p-4 grid grid-cols-2 gap-y-3.5 gap-x-2 text-xs font-bold dark:font-medium text-slate-700 dark:text-slate-300 mb-6" dir="ltr">
+                <div class="flex items-center justify-end gap-2"><span>No ads</span><i class="fa-solid fa-ban text-orange-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>4 devices</span><i class="fa-solid fa-tv text-amber-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Simulcast</span><i class="fa-solid fa-bolt text-yellow-500"></i></div>
+                <div class="flex items-center justify-end gap-2"><span>Offline</span><i class="fa-solid fa-cloud-arrow-down text-sky-500"></i></div>
+              </div>
+              <div class="mb-6">
+                <p class="text-xs text-slate-500 dark:text-slate-400 font-bold dark:font-medium mb-3">اختر مدة الاشتراك:</p>
+                <div class="grid grid-cols-1 gap-2.5">
+                  <button type="button" class="duration-btn active rounded-2xl p-3 text-right flex items-center justify-between" data-duration="12 شهر" data-price="7.5">
+                    <span class="text-xs text-slate-700 dark:text-slate-300 font-bold">اشتراك لمدة 12 شهر (سنة)</span>
+                    <span class="text-sm font-black text-slate-900 dark:text-white">7.5 BD</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200/50 dark:border-white/10 flex items-center justify-between">
+              <div>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 font-medium mb-0.5">السعر الرسمي: <span class="line-through text-red-500 font-bold">19.0 BD</span> / سنوياً</p>
+                <p class="text-2xl font-black text-slate-900 dark:text-white"><span class="selected-price">7.5</span> <span class="text-xs font-bold text-orange-600 dark:text-orange-400">BD</span> <span class="text-xs font-bold text-slate-400">/ <span class="selected-duration">12 شهر</span></span></p>
+              </div>
+              <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D9%81%D9%8A%20Crunchyroll%20Mega%20(%D9%84%D9%85%D8%AF%D8%A9%2012%20%D8%B4%D9%87%D8%B1%20-%207.5%20BD)" target="_blank" rel="noopener" class="order-btn bg-[#FF640A] hover:bg-[#e65a09] text-white font-bold text-sm px-6 py-3 rounded-2xl shadow-lg shadow-orange-500/30 transition">اشترك الآن</a>
+            </div>
+          </article>
+
+          <!-- 6. تبحث عن اشتراك آخر؟ (Customer Service - Other) -->
+          <article class="sub-card liquid-glass liquid-card rounded-3xl p-6 flex flex-col justify-between relative transform scale-100 opacity-100 overflow-hidden" data-category="other" data-aos="fade-up" data-aos-delay="650">
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-2xl"></div>
+            <div class="relative z-10">
+              <div class="flex items-start justify-between gap-3 mb-6">
+                <div class="flex items-center gap-3.5">
+                  <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 backdrop-blur-sm">
+                    <svg class="w-8 h-8" viewBox="0 0 448 512" fill="#10B981" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white leading-tight">تبحث عن اشتراك آخر؟</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">تواصل معنا لتوفيره لك</p>
+                  </div>
+                </div>
+                <span class="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30 shrink-0 backdrop-blur-sm">
+                  أخرى
+                </span>
+              </div>
+              <div class="liquid-glass rounded-2xl p-5 text-sm font-medium text-slate-700 dark:text-slate-200 leading-relaxed mb-6">
+                هل لديك استفسار عن الباقات المتوفرة أو ترغب بطلب أكثر من اشتراك بسعر خاص؟ فريقنا جاهز لخدمتك فوراً عبر الواتساب وتوفير أي خدمة رقمية تحتاجها.
+              </div>
+            </div>
+            <div class="pt-4 border-t border-slate-200/50 dark:border-white/10 relative z-10">
+              <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D9%84%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%20%D8%B1%D9%82%D9%85%D9%8A" target="_blank" rel="noopener" class="w-full inline-flex items-center justify-center gap-2.5 bg-emerald-500 hover:bg-emerald-600 text-slate-900 font-black text-sm px-6 py-3.5 rounded-2xl shadow-lg shadow-emerald-500/20 transition">
+                <i class="fa-brands fa-whatsapp text-lg"></i>
+                تواصل معنا عبر واتساب
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم من نحن والمميزات (About Section) -->
+    <section id="about" class="py-24 relative overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-16" data-aos="fade-up">
+          <span class="inline-block py-1 px-4 rounded-full liquid-glass text-purple-700 dark:text-purple-300 font-bold text-sm tracking-wide uppercase mb-3">لماذا PRIMSUB؟</span>
+          <h2 class="text-3xl sm:text-4xl font-black mt-2 mb-4 text-slate-900 dark:text-white">تجربة اشتراك رقمي لا مثيل لها</h2>
+          <p class="text-slate-600 dark:text-slate-400 font-medium">نحرص في PRIMSUB على تقديم اشتراكات رسمية وموثوقة بأفضل الأسعار مع خدمة عملاء سريعة تهتم بكل تفاصيل تجربتك.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="liquid-glass liquid-card rounded-3xl p-6 text-center transition" data-aos="fade-up" data-aos-delay="100">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-3xl shadow-sm border border-purple-500/20">
+              <i class="fa-solid fa-bolt"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 dark:text-white mb-2">تفعيل فوري</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">استلم بيانات اشتراكك أو التفعيل على حسابك الشخصي خلال دقائق معدودة من الطلب.</p>
+          </div>
+
+          <div class="liquid-glass liquid-card rounded-3xl p-6 text-center transition" data-aos="fade-up" data-aos-delay="200">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center text-3xl shadow-sm border border-blue-500/20">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 dark:text-white mb-2">ضمان ذهبي كامل</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">جميع اشتراكاتنا مشمولة بضمان كامل طوال فترة الاشتراك لراحة بالك التامة.</p>
+          </div>
+
+          <div class="liquid-glass liquid-card rounded-3xl p-6 text-center transition" data-aos="fade-up" data-aos-delay="300">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-3xl shadow-sm border border-emerald-500/20">
+              <i class="fa-solid fa-tags"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 dark:text-white mb-2">توفير يصل إلى 70٪</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">استمتع بجميع المزايا المدفوعة لأقوى المنصات العالمية بجزء بسيط من السعر الرسمي.</p>
+          </div>
+
+          <div class="liquid-glass liquid-card rounded-3xl p-6 text-center transition" data-aos="fade-up" data-aos-delay="400">
+            <div class="w-16 h-16 mx-auto mb-5 rounded-2xl bg-pink-500/10 text-pink-600 dark:text-pink-400 flex items-center justify-center text-3xl shadow-sm border border-pink-500/20">
+              <i class="fa-solid fa-headset"></i>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 dark:text-white mb-2">دعم فني متواصل</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">فريقنا متواجد دائماً عبر واتساب وإنستغرام للإجابة عن استفساراتك ومساعدتك فوراً.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- قسم تواصل معنا (Contact Section) -->
+    <section id="contact" class="py-24 relative overflow-hidden">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="liquid-glass rounded-3xl p-8 sm:p-12 shadow-2xl relative text-center" data-aos="zoom-in" data-aos-duration="800">
+          
+          <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold liquid-glass text-purple-700 dark:text-purple-300 mb-4">
+            <i class="fa-solid fa-comments"></i> تواصل مباشر وسريع
+          </span>
+
+          <h2 class="text-3xl sm:text-4xl font-black mb-4 text-slate-900 dark:text-white">جاهز لتفعيل اشتراكك الآن؟</h2>
+          <p class="text-slate-600 dark:text-slate-400 font-medium max-w-xl mx-auto mb-8 leading-relaxed">
+            تواصل معنا مباشرة عبر واتساب أو تابع عروضنا الحصرية على إنستغرام، وسنقوم بتفعيل اشتراكك في أسرع وقت.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center gap-4">
+            <a href="https://wa.me/97339250444?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%20PRIMSUB%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D8%A7%D9%84%D8%A7%D8%B4%D8%AA%D8%B1%D8%A7%D9%83%D8%A7%D8%AA" 
+               target="_blank" rel="noopener"
+               class="inline-flex items-center gap-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-emerald-500/30 transition transform hover:-translate-y-0.5">
+              <i class="fa-brands fa-whatsapp text-xl"></i>
+              تواصل عبر واتساب
+            </a>
+
+            <a href="https://instagram.com/primsub" 
+               target="_blank" rel="noopener"
+               class="inline-flex items-center gap-3 liquid-glass hover:bg-white/60 dark:hover:bg-white/20 text-slate-800 dark:text-white font-bold px-8 py-4 rounded-2xl transition transform hover:-translate-y-0.5">
+              <i class="fa-brands fa-instagram text-pink-500 text-xl"></i>
+              حسابنا على إنستغرام
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- الفوتر (Footer) -->
+  <footer class="liquid-glass border-t border-slate-200/50 dark:border-white/10 py-10 text-center text-sm text-slate-600 dark:text-slate-400 transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-2.5 font-black text-lg text-slate-900 dark:text-white">
+        <img src="Untitled-1.png" alt="PRIMSUB" class="w-8 h-8 rounded-xl object-cover shadow-md shadow-red-500/20"
+             onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1000 1000%22%3E%3Crect width=%221000%22 height=%221000%22 fill=%22%23EA0000%22/%3E%3Ccircle cx=%22375%22 cy=%22307%22 r=%2242%22 fill=%22%23FFFFFF%22/%3E%3Cpath d=%22M 490 307 H 535 A 88 88 0 0 1 535 483 H 382 V 693%22 fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2284%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/%3E%3C/svg%3E';" />
+        <span>PRIMSUB</span>
+      </div>
+
+      <p>© 2026 PRIMSUB. جميع الحقوق محفوظة.</p>
+
+      <div class="flex items-center gap-5 text-lg">
+        <a href="https://wa.me/97339250444" target="_blank" rel="noopener" class="text-slate-500 hover:text-emerald-500 dark:hover:text-emerald-400 transition" aria-label="WhatsApp">
+          <i class="fa-brands fa-whatsapp"></i>
+        </a>
+        <a href="https://instagram.com/primsub" target="_blank" rel="noopener" class="text-slate-500 hover:text-pink-500 dark:hover:text-pink-400 transition" aria-label="Instagram">
+          <i class="fa-brands fa-instagram"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AOS Animation Script -->
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+  <!-- السكربتات -->
+  <script>
+    AOS.init({
+      once: true,
+      offset: 50,
+      duration: 800,
+    });
+
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    if (document.documentElement.classList.contains('dark')) {
+        lightIcon.classList.remove('hidden');
+    } else {
+        darkIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', function() {
+        darkIcon.classList.toggle('hidden');
+        lightIcon.classList.toggle('hidden');
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('color-theme', 'light');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('color-theme', 'dark');
+        }
+    });
+
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const subCards = document.querySelectorAll('.sub-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('bg-purple-600', 'text-white', 'shadow-lg', 'shadow-purple-500/30');
+          b.classList.add('liquid-glass', 'text-slate-700', 'dark:text-slate-300');
+        });
+        
+        btn.classList.add('bg-purple-600', 'text-white', 'shadow-lg', 'shadow-purple-500/30');
+        btn.classList.remove('liquid-glass', 'text-slate-700', 'dark:text-slate-300');
+
+        const filterValue = btn.getAttribute('data-filter');
+
+        subCards.forEach(card => card.removeAttribute('data-aos'));
+
+        subCards.forEach(card => {
+          if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+            card.classList.remove('hidden');
+            setTimeout(() => {
+              card.classList.remove('opacity-0', 'scale-95');
+              card.classList.add('opacity-100', 'scale-100');
+            }, 10);
+          } else {
+            card.classList.remove('opacity-100', 'scale-100');
+            card.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => {
+              card.classList.add('hidden');
+            }, 300);
+          }
+        });
+
+        setTimeout(() => AOS.refresh(), 350);
+      });
+    });
+
+    subCards.forEach(card => {
+      const packageName = card.getAttribute('data-name');
+      const durationBtns = card.querySelectorAll('.duration-btn');
+      const priceEl = card.querySelector('.selected-price');
+      const durationEl = card.querySelector('.selected-duration');
+      const orderBtn = card.querySelector('.order-btn');
+
+      if(durationBtns.length > 0) {
+        durationBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            durationBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const newPrice = btn.getAttribute('data-price');
+            const newDuration = btn.getAttribute('data-duration');
+
+            priceEl.textContent = newPrice;
+            durationEl.textContent = newDuration;
+
+            const message = `مرحباً PRIMSUB، أرغب بالاشتراك في ${packageName} (لمدة ${newDuration} - ${newPrice} BD). هل العرض متوفر؟`;
+            orderBtn.href = `https://wa.me/97339250444?text=${encodeURIComponent(message)}`;
+          });
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
